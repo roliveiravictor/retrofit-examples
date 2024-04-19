@@ -9,8 +9,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stonetree.retrofit.example.RetrofitUiState.Loaded
+import com.stonetree.retrofit.example.RetrofitUiState.Loading
 import com.stonetree.retrofit.example.ui.theme.RetrofitExampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,13 +24,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val ping by vm.ping.collectAsStateWithLifecycle()
             RetrofitExampleTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    when (ping) {
+                        Loading -> Text(
+                            text = "Loading...",
+                        )
+
+                        Loaded -> Text(
+                            text = "Loaded",
+                        )
+                    }
                 }
             }
         }

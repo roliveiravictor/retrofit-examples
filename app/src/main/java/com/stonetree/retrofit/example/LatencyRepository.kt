@@ -31,6 +31,7 @@ class LatencyRepository {
     fun flow(): Flow<Latency> = callbackFlow {
         send(UNKNOWN)
         withContext(IO) {
+            Thread.sleep(3000)
             trySend(LatencyRemoteDataSource(service).sync())
             close()
         }
